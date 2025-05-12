@@ -1,13 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using MvcNetCoreAWSPostgresEC2.Data;
 using MvcNetCoreAWSPostgresEC2.Repositories;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = builder.Configuration.GetConnectionString("Postgres");
+string connectionString = builder.Configuration.GetConnectionString("MariaDbConnection");
+
+// Inyección de dependencias
 builder.Services.AddTransient<RepositoryHospitales>();
-builder.Services.AddDbContext<HospitalContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddDbContext<HospitalContext>(options =>
+    options.UseMySQL(connectionString)
+);
+
 
 builder.Services.AddControllersWithViews();
 
